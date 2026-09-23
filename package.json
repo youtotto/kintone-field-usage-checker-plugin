@@ -1,0 +1,11 @@
+{
+  "name": "field-usage-checker-plugin",
+  "private": true,
+  "description": "Test runner for the Field Usage Checker plugin (jsdom-based, no runtime dependencies)",
+  "scripts": {
+    "test": "node --test \"test/**/*.test.js\""
+  },
+  "devDependencies": {
+    "jsdom": "29.1.1"
+  }
+}

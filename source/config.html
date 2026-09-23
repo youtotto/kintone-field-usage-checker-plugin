@@ -1,0 +1,121 @@
+<div class="fuc-root">
+
+  <div class="fuc-loading" id="fuc-loading" hidden>
+    <div class="fuc-spinner" role="status" aria-label="読み込み中"></div>
+  </div>
+
+  <h2 class="fuc-title">フィールド使用状況チェッカー</h2>
+  <p class="fuc-lead">このアプリのフィールド一覧と、現在のアプリ設定から確認できる使用箇所を表示します。フィールドごとにメモを残せます。</p>
+
+  <div class="fuc-notice" role="note">
+    <p class="fuc-notice-main">「未検出」は、そのフィールドが削除して安全であることを保証するものではありません。<br>
+      本ツールでは、現在のアプリ設定から確認できる利用箇所を表示します。JavaScript カスタマイズや他アプリからの参照など、一部は対象外です。</p>
+    <p class="fuc-notice-sub">確認対象: 計算式・ルックアップ・関連レコード一覧（このアプリ側の条件）・一覧（表示列・絞り込み・並び替え・カレンダー）・通知・リマインダー・プロセス管理・グラフ・アプリアクション・アクセス権（レコード・フィールド）</p>
+    <p class="fuc-notice-sub">対象外: JavaScript カスタマイズ・CSS・REST API 経由の参照・他アプリからの参照（ルックアップ元・関連レコードの参照元）・カスタムビューの HTML・プラグイン設定</p>
+    <p class="fuc-notice-link">JavaScript や他アプリを含む依存関係を確認したい場合は AppInsight for kintone をご利用ください。</p>
+  </div>
+
+  <div class="fuc-row">
+    <label class="fuc-checkbox">
+      <input type="checkbox" id="fuc-show-field-code">
+      レコード詳細画面のフィールドラベルの横にフィールドコードを表示する
+    </label>
+  </div>
+
+  <div class="fuc-message" id="fuc-message" role="alert" hidden></div>
+  <div class="fuc-warning" id="fuc-warning" role="status" hidden></div>
+
+  <div class="fuc-toolbar" id="fuc-toolbar" hidden>
+    <label class="fuc-toolbar-item">
+      <span class="fuc-toolbar-label">検索</span>
+      <input type="search" id="fuc-search" class="fuc-search" placeholder="フィールドコード・名称で絞り込み" aria-label="フィールドコード・名称で絞り込み">
+    </label>
+    <label class="fuc-toolbar-item">
+      <span class="fuc-toolbar-label">表示</span>
+      <select id="fuc-filter" class="fuc-filter" aria-label="使用状況で絞り込み">
+        <option value="all">すべて</option>
+        <option value="used">使用箇所あり</option>
+        <option value="unused">未検出</option>
+      </select>
+    </label>
+    <span class="fuc-count" id="fuc-count" aria-live="polite"></span>
+  </div>
+
+  <table class="fuc-table" id="fuc-table" hidden>
+    <thead>
+      <tr>
+        <th class="fuc-th">#</th>
+        <th class="fuc-th">フィールド名称</th>
+        <th class="fuc-th">フィールドコード</th>
+        <th class="fuc-th">フィールドタイプ</th>
+        <th class="fuc-th fuc-th-usage">使用箇所</th>
+        <th class="fuc-th">必須</th>
+        <th class="fuc-th">重複禁止</th>
+        <th class="fuc-th">初期値</th>
+        <th class="fuc-th fuc-th-memo">メモ</th>
+      </tr>
+    </thead>
+    <tbody id="fuc-tbody"></tbody>
+  </table>
+  <p class="fuc-empty" id="fuc-empty" hidden>条件に一致するフィールドはありません。</p>
+
+  <div class="fuc-buttons">
+    <button type="button" id="fuc-save-btn" class="kintoneplugin-button-dialog-ok">保存</button>
+    <button type="button" id="fuc-cancel-btn" class="kintoneplugin-button-dialog-cancel">キャンセル</button>
+  </div>
+
+  <style>
+    .fuc-root { position: relative; font-size: 14px; color: #333; }
+    .fuc-title { margin: 8px 0 4px; font-size: 20px; }
+    .fuc-lead { margin: 0 0 12px; color: #555; }
+    .fuc-notice { border: 1px solid #f0c36d; background: #fff8e5; border-radius: 4px; padding: 10px 14px; margin: 0 0 16px; line-height: 1.6; }
+    .fuc-notice p { margin: 0; }
+    .fuc-notice-main { font-weight: bold; color: #7a5200; }
+    .fuc-notice-sub { margin-top: 6px !important; color: #6b5a2e; font-size: 13px; }
+    .fuc-notice-link { margin-top: 6px !important; color: #555; font-size: 13px; }
+    .fuc-row { margin: 12px 0; }
+    .fuc-checkbox { cursor: pointer; }
+    .fuc-checkbox input { margin-right: 6px; }
+    .fuc-message { border: 1px solid #e74c3c; background: #fdecea; color: #a12622; border-radius: 4px; padding: 10px 14px; margin: 12px 0; }
+    .fuc-warning { border: 1px solid #f0c36d; background: #fff8e5; color: #7a5200; border-radius: 4px; padding: 8px 14px; margin: 12px 0; font-size: 13px; line-height: 1.6; }
+    .fuc-warning ul { margin: 4px 0 0; padding-left: 20px; }
+    .fuc-toolbar { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; margin: 16px 0 8px; }
+    .fuc-toolbar-item { display: inline-flex; align-items: center; gap: 6px; }
+    .fuc-toolbar-label { color: #555; font-size: 13px; }
+    .fuc-search { width: 260px; max-width: 100%; padding: 4px 8px; border: 1px solid #ccc; border-radius: 3px; font-size: 14px; }
+    .fuc-filter { padding: 4px 8px; border: 1px solid #ccc; border-radius: 3px; font-size: 14px; background: #fff; }
+    .fuc-count { color: #555; font-size: 13px; }
+    .fuc-table { border-collapse: collapse; width: 100%; background: #fff; font-size: 13px; }
+    .fuc-table th, .fuc-table td { border: 1px solid #ddd; padding: 6px 8px; vertical-align: top; line-height: 1.4; }
+    .fuc-th { background: #f4f8fb; font-weight: bold; text-align: center; white-space: nowrap; }
+    .fuc-th-usage { min-width: 220px; }
+    .fuc-th-memo { min-width: 160px; }
+    .fuc-td-code { font-family: Consolas, Menlo, monospace; word-break: break-all; }
+    .fuc-td-center { text-align: center; }
+    .fuc-badges { display: flex; flex-wrap: wrap; gap: 4px; }
+    .fuc-badge { display: inline-block; border-radius: 10px; padding: 1px 8px; font-size: 12px; line-height: 1.5; white-space: nowrap; background: #e8f0fe; color: #1a4d8f; border: 1px solid #c5d6f2; }
+    .fuc-badge-name { font-weight: normal; opacity: 0.9; }
+    .fuc-badge-unused { background: #f1f1f1; color: #666; border-color: #ddd; }
+    .fuc-badge-na { background: #fff; color: #888; border-color: #e0e0e0; font-style: normal; }
+    .fuc-badge-form { background: #eaf6ea; color: #245c24; border-color: #bfe0bf; }
+    .fuc-badge-view { background: #e8f0fe; color: #1a4d8f; border-color: #c5d6f2; }
+    .fuc-badge-notify { background: #fdf0e6; color: #8a4b12; border-color: #f2d2b5; }
+    .fuc-badge-process { background: #f3e8fd; color: #5b2d8f; border-color: #dcc7f2; }
+    .fuc-badge-report { background: #e6f7f7; color: #145f5f; border-color: #b7e0e0; }
+    .fuc-badge-action { background: #fff3cd; color: #6b5200; border-color: #ecd68a; }
+    .fuc-badge-acl { background: #fde8e8; color: #8f1f1f; border-color: #f2c2c2; }
+    .fuc-badge-partial { background: #fff8e5; color: #7a5200; border-color: #f0c36d; }
+    .fuc-row-subtable { background: #f0f8ff; font-weight: bold; }
+    .fuc-row-subtable-child { background: #f9fcff; }
+    .fuc-row-reference { background: #fff5e6; font-weight: bold; }
+    .fuc-row-reference-child { background: #fffaf0; color: #666; }
+    .fuc-row-hidden { display: none; }
+    .fuc-memo { width: 100%; min-width: 140px; box-sizing: border-box; font-size: 13px; resize: vertical; }
+    .fuc-empty { color: #666; margin: 12px 0; }
+    .fuc-buttons { margin: 20px 0; }
+    .fuc-loading { position: absolute; inset: 0; background: rgba(255, 255, 255, 0.8); display: flex; justify-content: center; align-items: center; z-index: 10; min-height: 200px; }
+    .fuc-loading[hidden] { display: none; }
+    .fuc-spinner { width: 40px; height: 40px; border: 4px solid #ccc; border-top-color: #333; border-radius: 50%; animation: fuc-spin 1s linear infinite; }
+    @keyframes fuc-spin { to { transform: rotate(360deg); } }
+  </style>
+</div>
