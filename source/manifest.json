@@ -10,6 +10,10 @@
     "en": "Lists every field in the app with its name, code, type and where it is used in the app settings (calculations, lookups, views, notifications, process management, graphs, actions, permissions).",
     "ja": "フィールド名称・コード・フィールド型と、アプリ設定内（計算式・ルックアップ・一覧・通知・プロセス管理・グラフ・アクション・アクセス権）での使用箇所を一覧で確認できる無料プラグインです。"
   },
+  "homepage_url": {
+    "en": "https://www.nestrec.com/post/kintone-free-plugins-renewal",
+    "ja": "https://www.nestrec.com/post/kintone-free-plugins-renewal"
+  },
   "icon": "image/icon.png",
   "desktop": {
     "js": [

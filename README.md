@@ -1,5 +1,22 @@
 # フィールド使用状況チェッカー（Field Usage Checker）
 
+## 公式リンク
+
+- [無料版の配布ページ](https://github.com/youtotto/kintone-field-usage-checker-plugin)
+- [紹介ページ](https://www.nestrec.com/post/kintone-free-plugins-renewal)
+
+## ダウンロードと導入
+
+[Releases](https://github.com/youtotto/kintone-field-usage-checker-plugin/releases/latest) から次のファイルをダウンロードします。
+
+| ファイル | 用途 |
+|---|---|
+| `field-usage-checker-1.2.0-free-bundle.zip` | 説明書付きの配布用 ZIP（おすすめ）。**ZIP を解凍し、中の `field-usage-checker-1.2.0-free-plugin.zip` を kintone へ読み込みます。bundle 自体は kintone に直接読み込みません** |
+| `field-usage-checker-1.2.0-free-plugin.zip` | kintone に直接読み込むプラグイン（bundle の中身と同じファイル） |
+| `SHA256SUMS.txt` | 上記 ZIP の SHA-256 |
+
+kintone への読み込みは、kintone システム管理 →「プラグイン」→「読み込む」で `field-usage-checker-1.2.0-free-plugin.zip` を ZIP のまま選びます。
+
 「このフィールド、どこで使っていたっけ？」を確認するための無料 kintone プラグインです。
 
 アプリのフィールド一覧と、そのアプリの設定（計算式・ルックアップ・関連レコード一覧・一覧・通知・プロセス管理・グラフ・アプリアクション・アクセス権）の中で各フィールドがどこで使われているかを、プラグイン設定画面に一覧表示します。レコードのデータには一切触れない、読み取り専用のツールです。
@@ -65,7 +82,7 @@
 また、設定の取得に失敗した項目（権限がない場合など）は判定に含まれず、画面上部に一覧表示されます。フィールドを削除・変更する前に、これらの対象外の利用箇所も必ず確認してください。
 
 ### AppInsight for kintone
-JavaScript カスタマイズの解析や他アプリからの被参照を含む依存関係の分析は、[AppInsight for kintone](https://nestrec.com) で確認できます。本プラグインは 1 アプリを手早く確認する用途に絞っています。
+JavaScript カスタマイズの解析や他アプリからの被参照を含む依存関係の分析は、[AppInsight for kintone](https://www.nestrec.com/appinsight) で確認できます。本プラグインは 1 アプリを手早く確認する用途に絞っています。
 
 ---
 
